@@ -1,10 +1,7 @@
 from timeit import default_timer as timer
 from random import randint
-import rpy2
-from numpy import *
-import scipy as sp
-import rpy2.robjects as ro
-
+from ggplot import *
+import pandas as pd
 
 class AlgorithmAnalysis:
 
@@ -29,24 +26,24 @@ class AlgorithmAnalysis:
             start = timer()
             Algorithm(algorithmNum, sequencesList[x])
             end = timer()
-            timeDifference = start - end
+            timeDifference = end - start
             performTimeList[x] = timeDifference
 
 
         self.graphComplexity(performTimeList)
+
         return performTimeList
 
-    def graphComplexity(self, timeList):
-        n = len(timeList)
-        xCoordinates = [None] * n
+    def graphComplexity(self, performTimeList):
+        n = len(performTimeList)
+        sizesOfN = [None] * n
         for x in range(n):
-            xCoordinates[x] = x
-        xString = str(xCoordinates)
-        xString = xString[1:n-1]
-        yString = str(timeList)
-        yString = yString[1:n-1]
-        ro.r('x = c(' + xString + ' )')
-        ro.r('y = c(' + yString + ' )')
-        ro.r('plot(x, y)')
+            sizesOfN[x] = x
 
+        xlabel = "Sizes of N"
+        ylabel = "Algorithm Performance Time"
+        df = pd.DataFrame(performTimeList, columns=['Performance Time in Milliseconds'])
+        df['Sizes of N'] = sizesOfN
+        p = ggplot(aes(x = "Sizes of N", y="Performance Time in Milliseconds"), data=df) + geom_point()
+        print p
 

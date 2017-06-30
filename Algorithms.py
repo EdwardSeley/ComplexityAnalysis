@@ -26,12 +26,11 @@ class Algorithm:
                 sequence[j + 1] = sequence[j]
                 j = j - 1
             sequence[j + 1] = key
-        print(sequence)
         return sequence
 
 if __name__ == "__main__":
     analysis = AlgorithmAnalysis()
-    performTimeList = analysis.timeAlgorithm(0, 5)
+    performTimeList = analysis.timeAlgorithm(0, 5000)
 
 
 
