@@ -1,74 +1,52 @@
-from AlgorithmAnalysis import AlgorithmAnalysis
+def merge_sort(sequence, first, last):
+  if first < last:
+      middle = int(0.5 * (first + last))
+      merge_sort(sequence, first, middle)
+      merge_sort(sequence, middle + 1, last)
+      merge(sequence, first, middle, last)
 
-class Algorithm:
+def merge(sequence, first, middle, last):
+  subOneLength = middle - first + 1
+  subTwoLength = last - middle
+  leftSequence = [None] * (subOneLength + 1)
+  rightSequence = [None] * (subTwoLength + 1)
+  for x in range(subOneLength):
+      leftSequence[x] = sequence[first + x]
+  for y in range(subTwoLength):
+      rightSequence[y] = sequence[middle + 1 + y]
 
-    def __init__(self, AlgorithmNum, sequence):
+  leftSequence[subOneLength] = 1000
+  rightSequence[subTwoLength] = 1000
 
-        options = {0 : lambda: self.insertionSort(sequence),
-                   1 : lambda: self.merge_sort(sequence, 0, len(sequence)),
-                   #4: sqr,
-                   #9: sqr,
-                   #2: even,
-                   #3: prime,
-                   #5: prime,
-                   #7: prime,
-                   }
+  x = 0
+  y = 0
+  i = 0
 
-        options[AlgorithmNum]()
+  for i in range(first, last):
+      if leftSequence[x] < rightSequence[y]:
+          sequence[i] = leftSequence[x]
+          x = x + 1
+      else:
+          sequence[i] = rightSequence[y]
+          y = y + 1
+  
+  i = i + 1
+  # Copy the remaining elements of L[], if there
+  # are any
+  while x < subOneLength:
+      sequence[i] = leftSequence[x]
+      x += 1
+      i += 1
 
-    def insertionSort(self, sequence):
-        for x in range(1, len(sequence)):
-            key = sequence[x]
-            j = x - 1
-            while key < sequence[j] and j > -1:
-                sequence[j + 1] = sequence[j]
-                j = j - 1
-            sequence[j + 1] = key
-        return sequence
+  # Copy the remaining elements of R[], if there
+  # are any
+  while y < subTwoLength:
+      sequence[i] = rightSequence[y]
+      y += 1
+      i += 1
 
-    def merge_sort(self, sequence, first, last):
-        if first < last:
-            middle = int(0.5 * (first + last))
-            self.merge_sort(sequence, first, middle)
-            self.merge_sort(sequence, middle + 1, last)
-            self.merge(sequence, first, middle, last)
-            print(sequence)
-
-    def merge(self, sequence, first, middle, last):
-        subOneLength = middle - first
-        subTwoLength = last - middle
-        leftSequence = [None] * (subOneLength + 1)
-        rightSequence = [None] * (subTwoLength + 1)
-        for x in range(subOneLength):
-            leftSequence[x] = sequence[first + x]
-        for y in range(subTwoLength):
-            rightSequence[y] = sequence[middle + y]
-
-        leftSequence[subOneLength] = 1000
-        rightSequence[subTwoLength] = 1000
-
-        print("subOneLength: " + str(subOneLength))
-        print("subTwoLength: " + str(subTwoLength))
-        print("left sequence: " + str(leftSequence))
-        print("right sequence: " + str(rightSequence))
-
-        x = 0
-        y = 0
-
-        for i in range(first, last):
-            if leftSequence[x] < rightSequence[y]:
-                sequence[i] = leftSequence[x]
-                x = x + 1
-            else:
-                sequence[i] = rightSequence[y]
-                y = y + 1
-
-if __name__ == "__main__":
-    #analysis = AlgorithmAnalysis()
-    #performTimeList = analysis.timeAlgorithm(0, 1000)
-    random_list = [3, 7, 1, 9, 3, 6, 4, 12]
-    Algorithm(1, random_list)
-
+random_list = [3, 7, 1, 9, 3, 6, 7, 4, 12, 5, 8]
+merge_sort(random_list, 0, len(random_list) - 1)
 
 
 
