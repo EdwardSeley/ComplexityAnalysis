@@ -11,17 +11,20 @@ class AlgorithmAnalysis:
             sequence[x] = randint(0, n)
         return sequence
 
-    def timeAlgorithm(self, algorithmNum, n):
+    def analyzeAlgorithm(self, algorithmNum, n):
 
         from Algorithms import Algorithm
+
+        n += 1
 
         performTimeList = [None] * n
 
         sequencesList = [None] * n
+        
         for x in range(n):
             randomSequence = self.sequenceGenerator(x)
             sequencesList[x] = randomSequence
-
+        
         for x in range(n):
             start = timer()
             Algorithm(algorithmNum, sequencesList[x])
@@ -29,21 +32,17 @@ class AlgorithmAnalysis:
             timeDifference = end - start
             performTimeList[x] = timeDifference
 
-
-        self.graphComplexity(performTimeList)
+        self.graphComplexity(performTimeList, Algorithm(algorithmNum, sequencesList[0]).algorithmName)
 
         return performTimeList
 
-    def graphComplexity(self, performTimeList):
+    def graphComplexity(self, performTimeList, algorithmName):
         n = len(performTimeList)
         sizesOfN = [None] * n
         for x in range(n):
             sizesOfN[x] = x
 
-        xlabel = "Sizes of N"
-        ylabel = "Algorithm Performance Time"
         df = pd.DataFrame(performTimeList, columns=['Performance Time in Milliseconds'])
         df['Sizes of N'] = sizesOfN
-        p = ggplot(aes(x = "Sizes of N", y="Performance Time in Milliseconds"), data=df) + geom_point()
-        print p
-
+        p = ggplot(aes(x = "Sizes of N", y="Performance Time in Milliseconds"), data=df) + geom_point() + ggtitle("Analysis of Time Complexity for " + algorithmName)
+        print(p)
